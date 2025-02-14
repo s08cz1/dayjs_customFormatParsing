@@ -1,11 +1,14 @@
 import { u } from '../localizedFormat/utils'
 
-const formattingTokens = /(\[[^[]*\])|([-_:/.,()\s]+)|(A|a|Q|YYYY|YY?|ww?|MM?M?M?|Do|DD?|hh?|HH?|mm?|ss?|S{1,3}|z|ZZ?)/g
+const formattingTokens = /(\[[^[]*\])|([-_:/.,()\s]+)|(A|a|Q|YYYY|YY?|ww?|MM?M?M?|Do|DD?|hh?|HH?|mm?|ss?|S{1,7}|z|ZZ?)/g
 
 const match1 = /\d/ // 0 - 9
 const match2 = /\d\d/ // 00 - 99
 const match3 = /\d{3}/ // 000 - 999
 const match4 = /\d{4}/ // 0000 - 9999
+const match5 = /\d{5}/ // 00000 - 99999
+const match6 = /\d{6}/ // 000000 - 999999
+const match7 = /\d{7}/ // 0000000 - 9999999
 const match1to2 = /\d\d?/ // 0 - 99
 const matchSigned = /[+-]?\d+/ // -inf - inf
 const matchOffset = /[+-]\d\d:?(\d\d)?|Z/ // +00:00 -00:00 +0000 or -0000 +00 or Z
@@ -70,12 +73,24 @@ const expressions = {
     this.month = ((input - 1) * 3) + 1
   }],
   S: [match1, function (input) {
-    this.milliseconds = +input * 100
+    this.milliseconds = +input * 1000000
   }],
   SS: [match2, function (input) {
-    this.milliseconds = +input * 10
+    this.milliseconds = +input * 100000
   }],
   SSS: [match3, function (input) {
+    this.milliseconds = +input * 10000
+  }],
+  SSSS: [match4, function (input) {
+    this.milliseconds = +input * 1000
+  }],
+  SSSSS: [match5, function (input) {
+    this.milliseconds = +input * 100
+  }],
+  SSSSSS: [match6, function (input) {
+    this.milliseconds = +input * 10
+  }],
+  SSSSSSS: [match7, function (input) {
     this.milliseconds = +input
   }],
   s: [match1to2, addInput('seconds')],
